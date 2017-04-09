@@ -28,13 +28,13 @@ public class TicTacToeFrame
     private boolean quit;
     private Clip music;
     private AudioInputStream audioInputStream;
+    private Clip clip;
     /** 
      * Constructs a new Tic-Tac-Toe JFrame with 3 JPanels, one for the board, one for status, and one for menu (newgame/exit)
      */
     public TicTacToeFrame()
     { 
         // add the necessary code here
-        
         panel = new JPanel();
         winner = false;
         quit = false;
@@ -68,6 +68,7 @@ public class TicTacToeFrame
             clip.open(audioInputStream);
             clip.start();
             music = clip;
+            audioInputStream.close();
         }
         catch(Exception ex)
         {
@@ -84,6 +85,8 @@ public class TicTacToeFrame
                     frame.setVisible(false);
                     quit = true;
                     music.stop();
+                    clip.close();
+                    music.close();
                 }
             });
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -95,7 +98,10 @@ public class TicTacToeFrame
                         JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
                        frame.setVisible(false);
                        quit = true;
+                       clip.stop();
                        music.stop();
+                       clip.close();
+                       music.close();
                     }
                 }
             });
@@ -108,7 +114,6 @@ public class TicTacToeFrame
         panel2.setPreferredSize(new Dimension(150,100));
         ImageIcon img = new ImageIcon(this.getClass().getResource("icon.jpg"));
         frame.setIconImage(img.getImage());
-
         frame.add(panel);
         frame.add(panel1);
         frame.add(panel2);  
@@ -137,6 +142,7 @@ public class TicTacToeFrame
                 buttons[i][c].newMove();
             }
         }
+        clip.stop();
         status.setText("New game started. X's turn.");
     }
     /**
@@ -157,9 +163,10 @@ public class TicTacToeFrame
             AudioInputStream audioInputStream  =
                 AudioSystem.getAudioInputStream(
                     this.getClass().getResource("tie.wav"));
-            Clip clip = AudioSystem.getClip();
+            clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
+            audioInputStream.close();
         }
         catch(Exception ex)
         {
@@ -222,9 +229,11 @@ public class TicTacToeFrame
             AudioInputStream audioInputStream  =
                 AudioSystem.getAudioInputStream(
                     this.getClass().getResource("triple.wav"));
-            Clip clip = AudioSystem.getClip();
+            clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
+            
+            audioInputStream.close();
         }
         catch(Exception ex)
         {
