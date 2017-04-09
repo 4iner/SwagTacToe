@@ -10,7 +10,6 @@ public class Main
 {
     public static void main(String[] args){
         TicTacToeFrame game = new TicTacToeFrame();
-        while(game.end()){}//NOT an infinite loop; game.end() changes every iteration. This checks if user pressed quit.
-        //if(game.end()) game.stopMusic();
+        while(!game.end()){}//NOT an infinite loop; game.end() changes every iteration. This checks if user pressed quit
     }
 }
