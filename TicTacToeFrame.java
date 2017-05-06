@@ -7,6 +7,8 @@ import java.awt.GridLayout;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import java.awt.Image;
+import javax.imageio.*;
 
 /**
  * A simple tic-tac-toe game with Java swing GUI.
@@ -29,6 +31,8 @@ public class TicTacToeFrame
     private Clip music;
     private AudioInputStream audioInputStream;
     private Clip clip;
+    private ImageIcon xIcon;
+    private ImageIcon oIcon;
     /** 
      * Constructs a new Tic-Tac-Toe JFrame with 3 JPanels, one for the board, one for status, and one for menu (newgame/exit)
      */
@@ -40,6 +44,11 @@ public class TicTacToeFrame
         quit = false;
         plr = true;
         player = "X";
+        try{
+            oIcon = new ImageIcon(ImageIO.read(getClass().getResource("o.png")));
+            xIcon = new ImageIcon(ImageIO.read(getClass().getResource("x.png"))); 
+        } catch(Exception ex){
+        }
         numFreeSquares = 9;
         frame = new JFrame("TicTacToe");
         status = new JLabel("Welcome to TicTacToe! It is currently X's turn. ",SwingConstants.CENTER);
@@ -48,12 +57,11 @@ public class TicTacToeFrame
         for(int i = 0; i < 3; i++){
             for(int c = 0; c < 3;c++){
                 buttons[i][c]  = new Button(i, c, this);
+                buttons[i][c].setPreferredSize(new Dimension(50,50));
                 panel.add(buttons[i][c]);
-
                 buttons[i][c].setText(" ");
             }
         }
-
         JPanel panel1 = new JPanel();
         panel1.add(status);
         JPanel panel2 = new JPanel();
@@ -96,12 +104,12 @@ public class TicTacToeFrame
                         "Are you sure to close this window?", "Really Closing?", 
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-                       frame.setVisible(false);
-                       quit = true;
-                       clip.stop();
-                       music.stop();
-                       clip.close();
-                       music.close();
+                        frame.setVisible(false);
+                        quit = true;
+                        clip.stop();
+                        music.stop();
+                        clip.close();
+                        music.close();
                     }
                 }
             });
@@ -127,7 +135,13 @@ public class TicTacToeFrame
     public boolean end(){
         return quit;
     }
-
+    /**
+     * returns the icon of the respective player
+     */
+    public ImageIcon getIcon(String p){
+        return p.equals("x")?xIcon:oIcon;
+    }
+    
     /**
      * resets the board and starts a new game
      */
@@ -139,12 +153,14 @@ public class TicTacToeFrame
         for(int i = 0; i < 3; i++){
             for(int c = 0; c < 3;c++){
                 buttons[i][c].setText(" ");
+                buttons[i][c].setIcon(null);
                 buttons[i][c].newMove();
             }
         }
         clip.stop();
         status.setText("New game started. X's turn.");
     }
+
     /**
      * updates the current board
      */
@@ -160,17 +176,17 @@ public class TicTacToeFrame
         }
         else if(numFreeSquares==0){
             try{
-            AudioInputStream audioInputStream  =
-                AudioSystem.getAudioInputStream(
-                    this.getClass().getResource("tie.wav"));
-            clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-            audioInputStream.close();
-        }
-        catch(Exception ex)
-        {
-        }
+                AudioInputStream audioInputStream  =
+                    AudioSystem.getAudioInputStream(
+                        this.getClass().getResource("tie.wav"));
+                clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                clip.start();
+                audioInputStream.close();
+            }
+            catch(Exception ex)
+            {
+            }
             status.setText("Tied game. Press New Game, or Quit");
         }
         else {
@@ -184,7 +200,7 @@ public class TicTacToeFrame
      */
     public boolean haveWinner(int row, int col) 
     {
-
+        /*
         // check row "row"
         if ( buttons[row][0].getText().equals(buttons[row][1].getText()) &&
         buttons[row][0].getText().equals(buttons[row][2].getText()) ) return true;
@@ -195,13 +211,33 @@ public class TicTacToeFrame
 
         // if row=col check one diagonal
         if (row==col)
-            if ( buttons[0][0].getText().equals(buttons[1][1].getText()) &&
-            buttons[0][0].getText().equals(buttons[2][2].getText()) ) return true;
+        if ( buttons[0][0].getText().equals(buttons[1][1].getText()) &&
+        buttons[0][0].getText().equals(buttons[2][2].getText()) ) return true;
 
         // if row=2-col check other diagonal
         if (row==2-col)
-            if ( buttons[0][2].getText().equals(buttons[1][1].getText()) &&
-            buttons[0][2].getText().equals(buttons[2][0].getText()) ) return true;
+        if ( buttons[0][2].getText().equals(buttons[1][1].getText()) &&
+        buttons[0][2].getText().equals(buttons[2][0].getText()) ) return true;
+         */
+        // check row "row"
+        if(buttons[row][0].getIcon()!=null && buttons[row][1].getIcon()!=null && buttons[row][2].getIcon()!=null)
+            if (buttons[row][0].getIcon().equals(buttons[row][1].getIcon()) &&
+            buttons[row][0].getIcon().equals(buttons[row][2].getIcon()) ) return true;
+
+        // check column "col"
+        if(buttons[0][col].getIcon()!=null && buttons[1][col].getIcon()!=null && buttons[2][col].getIcon()!=null)
+            if ( buttons[0][col].getIcon().equals(buttons[1][col].getIcon()) &&
+            buttons[0][col].getIcon().equals(buttons[2][col].getIcon()) ) return true;
+
+        // if row=col check one diagonal
+        if (row==col && buttons[0][0].getIcon()!=null && buttons[1][1].getIcon()!=null && buttons[2][2].getIcon()!=null)
+            if ( buttons[0][0].getIcon().equals(buttons[1][1].getIcon()) &&
+            buttons[0][0].getIcon().equals(buttons[2][2].getIcon()) ) return true;
+
+        // if row=2-col check other diagonal
+        if (row==2-col && buttons[0][2].getIcon()!=null && buttons[1][1].getIcon()!=null && buttons[2][0].getIcon()!=null)
+            if ( buttons[0][2].getIcon().equals(buttons[1][1].getIcon()) &&
+            buttons[0][2].getIcon().equals(buttons[2][0].getIcon()) ) return true;
 
         // no winner yet
         return false;
@@ -232,7 +268,7 @@ public class TicTacToeFrame
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
-            
+
             audioInputStream.close();
         }
         catch(Exception ex)

@@ -3,6 +3,8 @@ import javax.swing.*;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import java.awt.Image;
+import javax.imageio.*;
 
 /**
  * Button for the tic tac toe board
@@ -27,8 +29,6 @@ public class Button extends JButton implements ActionListener
         this.col = col;
         this.row = row;
         gameRef = game;
-        //x = new ImageIcon(this.getClass().getResource("x.png"));
-        //o = new ImageIcon(this.getClass().getResource("o.png"));
         this.addActionListener(this);
     }
 
@@ -36,38 +36,25 @@ public class Button extends JButton implements ActionListener
      * checks if user clicked button, if clicked then update game and disable this button
      */
     public void actionPerformed(ActionEvent e){
-
-        String player = gameRef.getPlayer() ? "X" : "O";
-        if(gameRef.getPlayer()){
-            try{
-                AudioInputStream audioInputStream =
-                    AudioSystem.getAudioInputStream(
-                        this.getClass().getResource("x.wav"));
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
-                clip.start();
-            }
-            catch(Exception ex)
-            {
-            }
-        }else try{
-                AudioInputStream audioInputStream =
-                    AudioSystem.getAudioInputStream(
-                        this.getClass().getResource("o.wav"));
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
-                clip.start();
-            }
-            catch(Exception ex)
-            {
-            }
-        this.setText(player);
+        String player = gameRef.getPlayer() ? "x" : "o";
+        try{
+            ImageIcon img = gameRef.getIcon(player);
+            this.setIcon(img);
+            this.setDisabledIcon(img);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+                    this.getClass().getResource(player+".wav"));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        }
+        catch(Exception ex)
+        {
+        }
         gameRef.changePlayer();
         if(gameRef.haveWinner(row, col)){
             gameRef.win(player);
         }
         gameRef.update();
-
         this.setEnabled(false);
     }
 
