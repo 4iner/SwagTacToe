@@ -45,7 +45,9 @@ public class TicTacToeFrame
         plr = true;
         player = "X";
         try{
+            //o icon source: https://twitter.com/realovirtualcom
             oIcon = new ImageIcon(ImageIO.read(getClass().getResource("o.png")));
+            //x icon source: https://x.company/
             xIcon = new ImageIcon(ImageIO.read(getClass().getResource("x.png"))); 
         } catch(Exception ex){
         }
@@ -100,23 +102,27 @@ public class TicTacToeFrame
                     frame.setVisible(false);
                     quit = true;
                     //music.stop();
-                    //clip.close();
+                    clip.close();
                     //music.close();
                 }
             });
-        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                    if (JOptionPane.showConfirmDialog(frame, 
-                        "Are you sure to close this window?", "Really Closing?", 
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    int ans = JOptionPane.showConfirmDialog(null, 
+                        "Are you sure you want to leave this game? :(", "Really Closing?", 
+                        JOptionPane.YES_NO_OPTION);
+                    if ( ans == JOptionPane.YES_OPTION){
                         frame.setVisible(false);
                         quit = true;
-                        //clip.stop();
+                        clip.stop();
                         //music.stop();
-                        //clip.close();
+                        clip.close();
                         //music.close();
+                        frame.dispose();
+                    } else if (ans == JOptionPane.NO_OPTION){
+                        
                     }
                 }
             });
@@ -146,7 +152,7 @@ public class TicTacToeFrame
      * returns the icon of the respective player
      */
     public ImageIcon getIcon(String p){
-        return p.equals("x")?xIcon:oIcon;
+        return p.equals("X")?xIcon:oIcon;
     }
     
     /**
@@ -165,6 +171,7 @@ public class TicTacToeFrame
             }
         }
         clip.stop();
+        clip.close();
         status.setText("New game started. X's turn.");
     }
 
@@ -207,25 +214,6 @@ public class TicTacToeFrame
      */
     public boolean haveWinner(int row, int col) 
     {
-        /*
-        // check row "row"
-        if ( buttons[row][0].getText().equals(buttons[row][1].getText()) &&
-        buttons[row][0].getText().equals(buttons[row][2].getText()) ) return true;
-
-        // check column "col"
-        if ( buttons[0][col].getText().equals(buttons[1][col].getText()) &&
-        buttons[0][col].getText().equals(buttons[2][col].getText()) ) return true;
-
-        // if row=col check one diagonal
-        if (row==col)
-        if ( buttons[0][0].getText().equals(buttons[1][1].getText()) &&
-        buttons[0][0].getText().equals(buttons[2][2].getText()) ) return true;
-
-        // if row=2-col check other diagonal
-        if (row==2-col)
-        if ( buttons[0][2].getText().equals(buttons[1][1].getText()) &&
-        buttons[0][2].getText().equals(buttons[2][0].getText()) ) return true;
-         */
         // check row "row"
         if(buttons[row][0].getIcon()!=null && buttons[row][1].getIcon()!=null && buttons[row][2].getIcon()!=null)
             if (buttons[row][0].getIcon().equals(buttons[row][1].getIcon()) &&
@@ -275,7 +263,6 @@ public class TicTacToeFrame
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
-
             audioInputStream.close();
         }
         catch(Exception ex)

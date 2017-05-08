@@ -36,7 +36,7 @@ public class Button extends JButton implements ActionListener
      * checks if user clicked button, if clicked then update game and disable this button
      */
     public void actionPerformed(ActionEvent e){
-        String player = gameRef.getPlayer() ? "x" : "o";
+        String player = gameRef.getPlayer() ? "X" : "O";
         try{
             ImageIcon img = gameRef.getIcon(player);
             this.setIcon(img);
