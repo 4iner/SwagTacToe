@@ -66,8 +66,15 @@ public class TicTacToeFrame
         panel1.add(status);
         JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayout(1, 2));
-        JButton newGameB = new JButton("New game");
-        JButton quitB = new JButton("Quit");
+        JMenuBar jBar = new JMenuBar();
+        JMenu menu = new JMenu("Menu");
+        
+        JMenuItem newGameB = new JMenuItem("New game");
+        JMenuItem quitB = new JMenuItem("Quit");
+        jBar.add(menu);
+        menu.add(newGameB);
+        menu.add(quitB);
+        frame.setJMenuBar(jBar);
         try{
             AudioInputStream audioInputStream  =
                 AudioSystem.getAudioInputStream(
@@ -113,13 +120,13 @@ public class TicTacToeFrame
                     }
                 }
             });
-        panel2.add(newGameB);
-        panel2.add(quitB);
+        //panel2.add(newGameB);
+        //panel2.add(quitB);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
         panel.setBackground(Color.BLACK);
         panel.setPreferredSize(new Dimension(300, 300));
-        panel1.setPreferredSize(new Dimension(150,50));
-        panel2.setPreferredSize(new Dimension(150,100));
+        panel1.setPreferredSize(new Dimension(150,30));
+        //panel2.setPreferredSize(new Dimension(150,100));
         ImageIcon img = new ImageIcon(this.getClass().getResource("icon.jpg"));
         frame.setIconImage(img.getImage());
         frame.add(panel);
