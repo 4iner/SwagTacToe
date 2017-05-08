@@ -75,7 +75,7 @@ public class TicTacToeFrame
         menu.add(newGameB);
         menu.add(quitB);
         frame.setJMenuBar(jBar);
-        try{
+       /* try{
             AudioInputStream audioInputStream  =
                 AudioSystem.getAudioInputStream(
                     this.getClass().getResource("song.wav"));
@@ -87,7 +87,7 @@ public class TicTacToeFrame
         }
         catch(Exception ex)
         {
-        }
+        }*/
         newGameB.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -99,9 +99,9 @@ public class TicTacToeFrame
                 public void actionPerformed(ActionEvent e) {
                     frame.setVisible(false);
                     quit = true;
-                    music.stop();
-                    clip.close();
-                    music.close();
+                    //music.stop();
+                    //clip.close();
+                    //music.close();
                 }
             });
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -113,10 +113,10 @@ public class TicTacToeFrame
                         JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
                         frame.setVisible(false);
                         quit = true;
-                        clip.stop();
-                        music.stop();
-                        clip.close();
-                        music.close();
+                        //clip.stop();
+                        //music.stop();
+                        //clip.close();
+                        //music.close();
                     }
                 }
             });
